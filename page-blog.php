@@ -22,103 +22,40 @@ get_header();
 
             <div class="section-spacer" data-aos="fade-up">
                 <div class="row g-4">
+                    <?php
+                    $args = array(
+                        'post_type' => 'post',
+                        'posts_per_page' => 6,
+                    );
+                    $blog_query = new WP_Query($args);
 
-                    <!-- Blog Post 1 -->
+                    if ($blog_query->have_posts()) :
+                        while ($blog_query->have_posts()) : $blog_query->the_post();
+                            $thumbnail_url = get_the_post_thumbnail_url() ?: get_template_directory_uri() . '/img/blog-post-1.svg';
+                            $category = get_the_category();
+                            $cat_name = !empty($category) ? $category[0]->name : 'Blog';
+                    ?>
                     <div class="col-md-4">
                         <div class="card h-100 border-0 shadow-sm">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/blog-post-1.svg" class="card-img-top object-fit-cover" alt="Blog 1" style="height: 250px;">
+                            <img src="<?php echo esc_url($thumbnail_url); ?>" class="card-img-top object-fit-cover" alt="<?php the_title_attribute(); ?>" style="height: 250px;">
                             <div class="card-body p-4">
-                                <div class="text-accent small text-uppercase mb-2">Real Estate Trends</div>
-                                <h5 class="font-playfair mb-3"><a href="#" class="text-decoration-none text-dark">The Future of Luxury Living in 2024</a></h5>
-                                <p class="text-muted small mb-4">Explore the emerging trends in high-end real estate, from sustainable architecture to smart home integration.</p>
-                                <a href="#" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
+                                <div class="text-accent small text-uppercase mb-2"><?php echo esc_html($cat_name); ?></div>
+                                <h5 class="font-playfair mb-3"><a href="<?php the_permalink(); ?>" class="text-decoration-none text-dark"><?php the_title(); ?></a></h5>
+                                <p class="text-muted small mb-4"><?php echo get_the_excerpt(); ?></p>
+                                <a href="<?php the_permalink(); ?>" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
                             </div>
                             <div class="card-footer bg-white border-0 px-4 pb-4">
-                                <small class="text-muted">October 15, 2023</small>
+                                <small class="text-muted"><?php echo get_the_date(); ?></small>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Blog Post 2 -->
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/blog-post-2.svg" class="card-img-top object-fit-cover" alt="Blog 2" style="height: 250px;">
-                            <div class="card-body p-4">
-                                <div class="text-accent small text-uppercase mb-2">Interior Design</div>
-                                <h5 class="font-playfair mb-3"><a href="#" class="text-decoration-none text-dark">Top 5 Interior Design Styles for Modern Villas</a></h5>
-                                <p class="text-muted small mb-4">Discover how to transform your villa into a masterpiece with these timeless and contemporary design styles.</p>
-                                <a href="#" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer bg-white border-0 px-4 pb-4">
-                                <small class="text-muted">September 28, 2023</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Blog Post 3 -->
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/blog-post-3.svg" class="card-img-top object-fit-cover" alt="Blog 3" style="height: 250px;">
-                            <div class="card-body p-4">
-                                <div class="text-accent small text-uppercase mb-2">Investment</div>
-                                <h5 class="font-playfair mb-3"><a href="#" class="text-decoration-none text-dark">Why Real Estate is the Best Long-term Investment</a></h5>
-                                <p class="text-muted small mb-4">A comprehensive guide to understanding the value of property investment in the current economic climate.</p>
-                                <a href="#" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer bg-white border-0 px-4 pb-4">
-                                <small class="text-muted">September 10, 2023</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Blog Post 4 -->
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/blog-post-4.svg" class="card-img-top object-fit-cover" alt="Blog 4" style="height: 250px;">
-                            <div class="card-body p-4">
-                                <div class="text-accent small text-uppercase mb-2">Market Analysis</div>
-                                <h5 class="font-playfair mb-3"><a href="#" class="text-decoration-none text-dark">Understanding the Housing Market Cycle</a></h5>
-                                <p class="text-muted small mb-4">Key insights into how market cycles work and how to time your real estate purchases effectively.</p>
-                                <a href="#" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer bg-white border-0 px-4 pb-4">
-                                <small class="text-muted">August 22, 2023</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Blog Post 5 -->
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/blog-post-5.svg" class="card-img-top object-fit-cover" alt="Blog 5" style="height: 250px;">
-                            <div class="card-body p-4">
-                                <div class="text-accent small text-uppercase mb-2">Lifestyle</div>
-                                <h5 class="font-playfair mb-3"><a href="#" class="text-decoration-none text-dark">Living Green: Sustainable Features for Your Home</a></h5>
-                                <p class="text-muted small mb-4">How to incorporate eco-friendly features into your luxury home without compromising on style.</p>
-                                <a href="#" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer bg-white border-0 px-4 pb-4">
-                                <small class="text-muted">August 05, 2023</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Blog Post 6 -->
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/blog-post-6.svg" class="card-img-top object-fit-cover" alt="Blog 6" style="height: 250px;">
-                            <div class="card-body p-4">
-                                <div class="text-accent small text-uppercase mb-2">Construction</div>
-                                <h5 class="font-playfair mb-3"><a href="#" class="text-decoration-none text-dark">The Art of Modern Construction</a></h5>
-                                <p class="text-muted small mb-4">A behind-the-scenes look at the technologies and materials shaping today's skylines.</p>
-                                <a href="#" class="btn btn-link text-accent p-0 text-decoration-none fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer bg-white border-0 px-4 pb-4">
-                                <small class="text-muted">July 18, 2023</small>
-                            </div>
-                        </div>
-                    </div>
-
+                    <?php
+                        endwhile;
+                        wp_reset_postdata();
+                    else :
+                        echo '<p class="text-center text-muted">No blog posts found.</p>';
+                    endif;
+                    ?>
                 </div>
             </div>
 
