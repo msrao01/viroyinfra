@@ -1,0 +1,308 @@
+/*
+Theme Name: ViroyInfra
+Description: Luxury Real Estate Theme based on Viroy Infra design.
+Version: 1.0
+Author: Your Name
+*/
+
+:root {
+    --primary-navy: #1a2a3a;
+    --accent-gold: #c5a059;
+    --accent-gold-hover: #b08d4b;
+    --text-body: #4a4a4a;
+    --bg-light: #f8f9fa;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-body);
+    background-color: var(--bg-light);
+    line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6, .font-playfair {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--primary-navy);
+}
+
+.text-accent {
+    color: var(--accent-gold) !important;
+}
+
+.bg-navy {
+    background-color: var(--primary-navy) !important;
+}
+
+/* Navbar */
+.main-navbar {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    padding: 1rem 0;
+    transition: background 0.3s;
+}
+
+/* Mega Menu */
+.navbar .nav-item.dropdown {
+    position: static; /* Essential for full-width */
+}
+
+.navbar .dropdown-menu.mega-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    margin-top: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    background: #fff;
+}
+
+.mega-menu-img {
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.mega-menu-link:hover .mega-menu-img {
+    transform: scale(1.05);
+}
+
+/* Nav Item Spacing */
+.navbar-nav .nav-item {
+    margin: 0 15px; /* Increase menu item spacing */
+}
+
+/* Hero Section */
+.hero-img {
+    height: 85vh;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+.carousel-caption {
+    bottom: 20%;
+}
+.carousel-caption h5 {
+    color: var(--white);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+}
+
+/* Sticky Section Nav */
+#section-nav {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    z-index: 1040; /* Ensure it sits above the fixed main navbar when scrolled */
+}
+#section-nav .nav-link {
+    color: var(--primary-navy);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 1rem 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+#section-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-gold);
+    transition: width 0.3s;
+}
+#section-nav .nav-link:hover::after,
+#section-nav .nav-link.active::after {
+    width: 60%;
+}
+#section-nav .nav-link:hover,
+#section-nav .nav-link.active {
+    color: var(--accent-gold);
+}
+
+/* Typography & Layout */
+.section-spacer {
+    padding: 4rem 0;
+}
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-gold);
+}
+.display-4 {
+    font-weight: 700;
+}
+.price-tag {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+.stat-item {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.stat-item i {
+    font-size: 2rem;
+}
+
+/* Cards & Amenities */
+.amenity-card {
+    background: white;
+    padding: 2rem 1rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    border: 1px solid transparent;
+}
+.amenity-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: rgba(197, 160, 89, 0.2);
+}
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(197, 160, 89, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: var(--accent-gold);
+}
+.amenity-card .material-icons {
+    font-size: 2.5rem;
+}
+.amenity-card h5 {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* Accordion */
+.specs-accordion .accordion-item {
+    border: none;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    overflow: hidden;
+}
+.specs-accordion .accordion-button {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 1.5rem;
+    background: white;
+    color: var(--primary-navy);
+    box-shadow: none;
+}
+.specs-accordion .accordion-button:not(.collapsed) {
+    background-color: var(--bg-light);
+    color: var(--accent-gold);
+}
+.specs-accordion .accordion-button::after {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
+.specs-accordion .accordion-button:not(.collapsed)::after {
+    filter: sepia(1) hue-rotate(10deg) saturate(3); /* Tint active arrow goldish */
+    opacity: 1;
+}
+.specs-accordion .accordion-body {
+    padding: 1.5rem 2rem;
+    background-color: #fff;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+.spec-icon {
+    margin-right: 15px;
+    color: var(--accent-gold);
+    vertical-align: middle;
+}
+
+/* Forms & Buttons */
+.form-control {
+    border: 1px solid #e0e0e0;
+    border-radius: 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+.form-control:focus {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 0.2rem rgba(197, 160, 89, 0.25);
+}
+.btn-accent {
+    background-color: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: white;
+    transition: all 0.3s;
+}
+.btn-accent:hover {
+    background-color: var(--accent-gold-hover);
+    border-color: var(--accent-gold-hover);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    border-top: 5px solid var(--accent-gold);
+    padding-top: 5rem !important; /* Increase footer height */
+    padding-bottom: 5rem !important;
+}
+.hover-white:hover {
+    color: var(--white) !important;
+}
+.social-icon {
+    transition: color 0.3s;
+}
+.social-icon:hover {
+    color: var(--accent-gold) !important;
+}
+
+/* Utilities */
+.object-fit-cover {
+    object-fit: cover;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.gallery-img {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.gallery-img:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+    .hero-img {
+        height: 60vh;
+    }
+    #section-nav {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
