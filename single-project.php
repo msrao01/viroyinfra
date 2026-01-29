@@ -1,6 +1,12 @@
 <?php
 /* Template Name: Single Project */
 get_header();
+
+while ( have_posts() ) : the_post();
+    $featured_img_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+    if (!$featured_img_url) {
+        $featured_img_url = get_template_directory_uri() . '/img/living-room.svg';
+    }
 ?>
 
     <!-- Hero Section / Carousel -->
@@ -13,12 +19,13 @@ get_header();
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="<?php echo get_template_directory_uri(); ?>/img/living-room.svg" class="d-block w-100 hero-img" alt="Living Room">
+                    <img src="<?php echo esc_url($featured_img_url); ?>" class="d-block w-100 hero-img" alt="<?php the_title_attribute(); ?>">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5 class="display-4 font-playfair">Exquisite Living</h5>
-                        <p class="lead">Where luxury meets comfort in Beverly Hills</p>
+                        <h5 class="display-4 font-playfair"><?php the_title(); ?></h5>
+                        <p class="lead"><?php echo get_the_excerpt(); ?></p>
                     </div>
                 </div>
+                <!-- Static Placeholder Slides (since no gallery field exists) -->
                 <div class="carousel-item">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/kitchen.svg" class="d-block w-100 hero-img" alt="Kitchen">
                     <div class="carousel-caption d-none d-md-block">
@@ -66,7 +73,7 @@ get_header();
 
                     <!-- Quick Info -->
                     <div class="mb-5 text-center" data-aos="fade-up">
-                        <h1 class="display-4 font-playfair mb-3">Modern Luxury Villa</h1>
+                        <h1 class="display-4 font-playfair mb-3"><?php the_title(); ?></h1>
                         <p class="lead text-muted mb-2"><i class="bi bi-geo-alt-fill text-accent"></i> 123 Palm Avenue, Beverly Hills, CA 90210</p>
                         <h2 class="text-accent price-tag">$4,500,000</h2>
                     </div>
@@ -98,13 +105,14 @@ get_header();
                         <div class="row justify-content-center">
                             <div class="col-lg-10 text-center">
                                 <h3 class="section-title">About the Project</h3>
-                                <p class="lead-text">Experience the epitome of luxury living in this stunning modern villa located in the heart of Beverly Hills. This architectural masterpiece features an open floor plan, floor-to-ceiling windows, and top-of-the-line finishes throughout.</p>
-                                <p class="text-muted">The gourmet kitchen is equipped with state-of-the-art appliances and a large island, perfect for entertaining. The master suite offers a private retreat with a spa-like bathroom and a walk-in closet. Outside, you'll find a sparkling pool, a spacious patio, and beautifully landscaped gardens.</p>
+                                <div class="lead-text">
+                                    <?php the_content(); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 2. Project Gallery -->
+                    <!-- 2. Project Gallery (Placeholder) -->
                     <div id="gallery" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Project Gallery</h3>
                         <div class="row g-3">
@@ -124,7 +132,7 @@ get_header();
                         </div>
                     </div>
 
-                    <!-- 3. Floor Plans -->
+                    <!-- 3. Floor Plans (Placeholder) -->
                     <div id="floor-plans" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Floor Plans</h3>
                         <div class="row g-4">
@@ -153,7 +161,7 @@ get_header();
                         </div>
                     </div>
 
-                    <!-- 4. Amenities (Card Style) -->
+                    <!-- 4. Amenities (Placeholder) -->
                     <div id="amenities" class="section-spacer">
                         <h3 class="section-title text-center" data-aos="fade-up">Amenities</h3>
                         <div class="row g-4">
@@ -173,6 +181,8 @@ get_header();
                                     <h5>Home Theater</h5>
                                 </div>
                             </div>
+                            <!-- ... (More amenities items, keeping shortened for brevity in thought but will write full) ... -->
+                            <!-- Writing full content in write_file -->
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="150">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
@@ -224,7 +234,7 @@ get_header();
                         </div>
                     </div>
 
-                    <!-- 5. Specification (Accordion Style) -->
+                    <!-- 5. Specification (Accordion Style - Placeholder) -->
                     <div id="specs" class="section-spacer">
                         <h3 class="section-title text-center" data-aos="fade-up">Specifications</h3>
                         <div class="row justify-content-center">
@@ -389,7 +399,7 @@ get_header();
                         </div>
                     </div>
 
-                    <!-- 6. Location -->
+                    <!-- 6. Location (Placeholder) -->
                     <div id="location" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Location</h3>
                         <div class="row g-4">
@@ -404,7 +414,6 @@ get_header();
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body">
                                         <h5 class="font-playfair mb-4">Highlights</h5>
-
                                         <div class="mb-4">
                                             <h6 class="fw-bold text-accent"><i class="bi bi-bezier2 me-2"></i>Connectivity</h6>
                                             <ul class="list-unstyled text-muted small ms-4">
@@ -413,7 +422,6 @@ get_header();
                                                 <li>Metro Station: 10 mins</li>
                                             </ul>
                                         </div>
-
                                         <div class="mb-4">
                                             <h6 class="fw-bold text-accent"><i class="bi bi-hospital me-2"></i>Nearby Hospitals</h6>
                                             <ul class="list-unstyled text-muted small ms-4">
@@ -421,7 +429,6 @@ get_header();
                                                 <li>UCLA Medical: 15 mins</li>
                                             </ul>
                                         </div>
-
                                         <div class="mb-4">
                                             <h6 class="fw-bold text-accent"><i class="bi bi-book me-2"></i>Education</h6>
                                             <ul class="list-unstyled text-muted small ms-4">
@@ -429,7 +436,6 @@ get_header();
                                                 <li>UCLA Campus: 15 mins</li>
                                             </ul>
                                         </div>
-
                                         <div class="mb-0">
                                             <h6 class="fw-bold text-accent"><i class="bi bi-cart me-2"></i>Shopping</h6>
                                             <ul class="list-unstyled text-muted small ms-4">
@@ -437,14 +443,13 @@ get_header();
                                                 <li>The Grove: 15 mins</li>
                                             </ul>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 8. Contact Us -->
+                    <!-- 8. Contact Us (Static) -->
                     <div id="contact" class="section-spacer">
                         <h3 class="section-title text-center" data-aos="fade-up">Contact Us</h3>
                         <div class="row justify-content-center">
@@ -520,4 +525,7 @@ get_header();
         </div>
     </div>
 
-<?php get_footer(); ?>
+<?php
+endwhile; // End loop
+get_footer();
+?>

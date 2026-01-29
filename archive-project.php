@@ -1,5 +1,4 @@
 <?php
-/* Template Name: Projects Archive */
 get_header();
 ?>
 
@@ -23,21 +22,14 @@ get_header();
             <!-- Projects Archive List -->
             <div class="section-spacer">
                 <?php
-                $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-                $args = array(
-                    'post_type'      => 'project',
-                    'posts_per_page' => 10,
-                    'paged'          => $paged
-                );
-                $project_query = new WP_Query($args);
-
-                if ( $project_query->have_posts() ) :
+                if ( have_posts() ) :
                     $i = 0;
-                    while ( $project_query->have_posts() ) : $project_query->the_post();
+                    while ( have_posts() ) : the_post();
                         $i++;
                         $is_even = ($i % 2 == 0);
 
                         // Layout classes
+                        $row_class = $is_even ? '' : ''; // Currently both are same row structure, but col order changes
                         $img_col_order = $is_even ? 'order-md-1' : '';
                         $text_col_order = $is_even ? 'order-md-0' : '';
                         $text_align = $is_even ? 'text-md-end text-start' : '';
@@ -67,7 +59,7 @@ get_header();
                                             <p class="mb-1 text-muted small text-uppercase">Description</p>
                                             <p class="fw-semibold"><?php echo wp_trim_words(get_the_excerpt(), 10); ?></p>
                                         </div>
-                                        <!-- Placeholder stats -->
+                                        <!-- Placeholder stats since we don't have custom fields -->
                                         <div class="col-6">
                                             <p class="mb-1 text-muted small text-uppercase">Status</p>
                                             <p class="fw-semibold text-success">Available</p>
@@ -84,21 +76,12 @@ get_header();
                     endwhile;
 
                     // Pagination
-                    echo '<div class="col-12 mt-5">';
-                    echo '<nav aria-label="Page navigation">';
-                    echo paginate_links(array(
-                        'total' => $project_query->max_num_pages,
-                        'current' => $paged,
-                        'format' => '?paged=%#%',
-                        'type' => 'list',
+                    the_posts_pagination(array(
+                        'mid_size'  => 2,
                         'prev_text' => '<i class="bi bi-arrow-left"></i> Previous',
                         'next_text' => 'Next <i class="bi bi-arrow-right"></i>',
-                        'mid_size' => 2
                     ));
-                    echo '</nav>';
-                    echo '</div>';
 
-                    wp_reset_postdata();
                 else :
                     echo '<p class="text-center text-muted">No projects found.</p>';
                 endif;
