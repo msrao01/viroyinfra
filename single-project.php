@@ -181,8 +181,6 @@ while ( have_posts() ) : the_post();
                                     <h5>Home Theater</h5>
                                 </div>
                             </div>
-                            <!-- ... (More amenities items, keeping shortened for brevity in thought but will write full) ... -->
-                            <!-- Writing full content in write_file -->
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="150">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">

@@ -3,6 +3,7 @@ function viroyinfra_scripts() {
     // Styles
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css', array(), '5.3.0');
     wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css', array(), '1.10.0');
+    // wp_enqueue_style('material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', array(), null); // Removed in favor of Bootstrap Icons
     wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap', array(), null);
     wp_enqueue_style('aos-css', 'https://unpkg.com/aos@2.3.1/dist/aos.css', array(), '2.3.1');
     wp_enqueue_style('viroyinfra-style', get_stylesheet_uri());
@@ -10,6 +11,13 @@ function viroyinfra_scripts() {
     // Scripts
     wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', array(), '5.3.0', true);
     wp_enqueue_script('aos-js', 'https://unpkg.com/aos@2.3.1/dist/aos.js', array(), '2.3.1', true);
+
+    // Load More JS
+    wp_enqueue_script('viroyinfra-load-more', get_template_directory_uri() . '/js/load-more.js', array(), '1.0', true);
+    wp_localize_script('viroyinfra-load-more', 'viroyinfra_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('load_more_projects_nonce')
+    ));
 
     // Custom JS for AOS and Counters
     wp_add_inline_script('aos-js', '
@@ -108,4 +116,39 @@ function viroyinfra_register_project_cpt() {
     register_post_type('project', $args);
 }
 add_action('init', 'viroyinfra_register_project_cpt');
+
+// AJAX Load More Projects Handler
+function viroyinfra_ajax_load_more_projects() {
+    check_ajax_referer('load_more_projects_nonce', 'security');
+
+    $paged = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
+    $posts_per_page = 10;
+
+    $args = array(
+        'post_type'      => 'project',
+        'posts_per_page' => $posts_per_page,
+        'paged'          => $paged,
+        'post_status'    => 'publish'
+    );
+
+    $project_query = new WP_Query($args);
+
+    if ( $project_query->have_posts() ) :
+        // Calculate global offset to maintain alternating layout
+        // (paged - 1) * per_page + current_loop_index (1-based)
+        $offset_base = ($paged - 1) * $posts_per_page;
+        $i = 0;
+
+        while ( $project_query->have_posts() ) : $project_query->the_post();
+            $i++;
+            $global_i = $offset_base + $i;
+            get_template_part('template-parts/content', 'project', array('global_i' => $global_i));
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+    die();
+}
+add_action('wp_ajax_load_more_projects', 'viroyinfra_ajax_load_more_projects');
+add_action('wp_ajax_nopriv_load_more_projects', 'viroyinfra_ajax_load_more_projects');
 ?>
