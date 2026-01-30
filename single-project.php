@@ -187,7 +187,12 @@ while ( have_posts() ) : the_post();
                     <div id="floor-plans" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Floor Plans</h3>
 
-                        <?php if (!empty($floor_plans_ids)) : ?>
+                        <?php if (!empty($floor_plans_ids)) :
+                            $count_floor_plans = count($floor_plans_ids);
+
+                            // If more than 2, use Carousel
+                            if ($count_floor_plans > 2) :
+                        ?>
                             <div id="floorPlansCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <?php
@@ -204,8 +209,8 @@ while ( have_posts() ) : the_post();
                                             ?>
                                             <div class="col-md-6">
                                                 <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($plan_url); ?>">
-                                                    <div class="overflow-hidden rounded-top">
-                                                        <img src="<?php echo esc_url($plan_url); ?>" class="card-img-top gallery-img" alt="Floor Plan">
+                                                    <div class="overflow-hidden rounded-top d-flex align-items-center justify-content-center bg-light" style="height: 300px;">
+                                                        <img src="<?php echo esc_url($plan_url); ?>" class="card-img-top gallery-img w-100 h-100" style="object-fit: contain;" alt="Floor Plan">
                                                     </div>
                                                     <div class="card-body text-center py-4">
                                                         <h5 class="card-title font-playfair">Floor Plan</h5>
@@ -229,7 +234,31 @@ while ( have_posts() ) : the_post();
                                     </button>
                                 <?php endif; ?>
                             </div>
-                        <?php else : ?>
+                        <?php
+                            // If 1 or 2, just show them in a row
+                            else :
+                        ?>
+                            <div class="row g-4 justify-content-center">
+                                <?php foreach ($floor_plans_ids as $plan_id) :
+                                    $plan_url = wp_get_attachment_image_url($plan_id, 'large');
+                                    if ($plan_url) :
+                                ?>
+                                <div class="col-md-6">
+                                    <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($plan_url); ?>">
+                                        <div class="overflow-hidden rounded-top d-flex align-items-center justify-content-center bg-light" style="height: 300px;">
+                                            <img src="<?php echo esc_url($plan_url); ?>" class="card-img-top gallery-img w-100 h-100" style="object-fit: contain;" alt="Floor Plan">
+                                        </div>
+                                        <div class="card-body text-center py-4">
+                                            <h5 class="card-title font-playfair">Floor Plan</h5>
+                                            <p class="text-muted small mb-0">Click to enlarge</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endif; endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php elseif (false) : // Fallback block kept but disabled/replaced logic above ?>
                             <!-- Fallback Static Floor Plans -->
                             <div class="row g-4">
                                 <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
