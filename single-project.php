@@ -168,7 +168,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="50">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">pool</span>
+                                        <i class="bi bi-water"></i>
                                     </div>
                                     <h5>Swimming Pool</h5>
                                 </div>
@@ -176,7 +176,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">theaters</span>
+                                        <i class="bi bi-film"></i>
                                     </div>
                                     <h5>Home Theater</h5>
                                 </div>
@@ -186,7 +186,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="150">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">wine_bar</span>
+                                        <i class="bi bi-cup-straw"></i>
                                     </div>
                                     <h5>Wine Cellar</h5>
                                 </div>
@@ -194,7 +194,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">settings_remote</span>
+                                        <i class="bi bi-router"></i>
                                     </div>
                                     <h5>Smart Home</h5>
                                 </div>
@@ -202,7 +202,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="250">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">garage</span>
+                                        <i class="bi bi-car-front"></i>
                                     </div>
                                     <h5>3-Car Garage</h5>
                                 </div>
@@ -210,7 +210,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">outdoor_grill</span>
+                                        <i class="bi bi-fire"></i>
                                     </div>
                                     <h5>Outdoor Kitchen</h5>
                                 </div>
@@ -218,7 +218,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="350">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">security</span>
+                                        <i class="bi bi-shield-check"></i>
                                     </div>
                                     <h5>Security System</h5>
                                 </div>
@@ -226,7 +226,7 @@ while ( have_posts() ) : the_post();
                             <div class="col-xl-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
                                 <div class="amenity-card">
                                     <div class="icon-wrapper">
-                                        <span class="material-icons">water</span>
+                                        <i class="bi bi-tsunami"></i>
                                     </div>
                                     <h5>Ocean View</h5>
                                 </div>
@@ -246,7 +246,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingStructure">
                                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStructure" aria-expanded="true" aria-controls="collapseStructure">
-                                                        <span class="material-icons spec-icon">foundation</span> Structure
+                                                        <i class="bi bi-bricks spec-icon"></i> Structure
                                                     </button>
                                                 </h2>
                                                 <div id="collapseStructure" class="accordion-collapse collapse show" aria-labelledby="headingStructure" data-bs-parent="#specsAccordion1">
@@ -258,7 +258,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingFlooring">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFlooring" aria-expanded="false" aria-controls="collapseFlooring">
-                                                        <span class="material-icons spec-icon">grid_view</span> Flooring
+                                                        <i class="bi bi-grid spec-icon"></i> Flooring
                                                     </button>
                                                 </h2>
                                                 <div id="collapseFlooring" class="accordion-collapse collapse" aria-labelledby="headingFlooring" data-bs-parent="#specsAccordion1">
@@ -270,7 +270,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingDoors">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDoors" aria-expanded="false" aria-controls="collapseDoors">
-                                                        <span class="material-icons spec-icon">door_front</span> Doors
+                                                        <i class="bi bi-door-closed spec-icon"></i> Doors
                                                     </button>
                                                 </h2>
                                                 <div id="collapseDoors" class="accordion-collapse collapse" aria-labelledby="headingDoors" data-bs-parent="#specsAccordion1">
@@ -282,7 +282,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingWindows">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWindows" aria-expanded="false" aria-controls="collapseWindows">
-                                                        <span class="material-icons spec-icon">window</span> Windows
+                                                        <i class="bi bi-window spec-icon"></i> Windows
                                                     </button>
                                                 </h2>
                                                 <div id="collapseWindows" class="accordion-collapse collapse" aria-labelledby="headingWindows" data-bs-parent="#specsAccordion1">
@@ -294,7 +294,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingKitchen">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseKitchen" aria-expanded="false" aria-controls="collapseKitchen">
-                                                        <span class="material-icons spec-icon">kitchen</span> Kitchen
+                                                        <i class="bi bi-egg-fried spec-icon"></i> Kitchen
                                                     </button>
                                                 </h2>
                                                 <div id="collapseKitchen" class="accordion-collapse collapse" aria-labelledby="headingKitchen" data-bs-parent="#specsAccordion1">
@@ -306,7 +306,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingUtility">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUtility" aria-expanded="false" aria-controls="collapseUtility">
-                                                        <span class="material-icons spec-icon">local_laundry_service</span> Utility
+                                                        <i class="bi bi-basket spec-icon"></i> Utility
                                                     </button>
                                                 </h2>
                                                 <div id="collapseUtility" class="accordion-collapse collapse" aria-labelledby="headingUtility" data-bs-parent="#specsAccordion1">
@@ -323,7 +323,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingElectrical">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseElectrical" aria-expanded="false" aria-controls="collapseElectrical">
-                                                        <span class="material-icons spec-icon">tungsten</span> Electrical
+                                                        <i class="bi bi-lightbulb spec-icon"></i> Electrical
                                                     </button>
                                                 </h2>
                                                 <div id="collapseElectrical" class="accordion-collapse collapse" aria-labelledby="headingElectrical" data-bs-parent="#specsAccordion2">
@@ -335,7 +335,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingPlumbing">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePlumbing" aria-expanded="false" aria-controls="collapsePlumbing">
-                                                        <span class="material-icons spec-icon">plumbing</span> Plumbing & Sanitary
+                                                        <i class="bi bi-wrench spec-icon"></i> Plumbing & Sanitary
                                                     </button>
                                                 </h2>
                                                 <div id="collapsePlumbing" class="accordion-collapse collapse" aria-labelledby="headingPlumbing" data-bs-parent="#specsAccordion2">
@@ -347,7 +347,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingPaint">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePaint" aria-expanded="false" aria-controls="collapsePaint">
-                                                        <span class="material-icons spec-icon">format_paint</span> Painting
+                                                        <i class="bi bi-brush spec-icon"></i> Painting
                                                     </button>
                                                 </h2>
                                                 <div id="collapsePaint" class="accordion-collapse collapse" aria-labelledby="headingPaint" data-bs-parent="#specsAccordion2">
@@ -359,7 +359,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingSecurity">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSecurity" aria-expanded="false" aria-controls="collapseSecurity">
-                                                        <span class="material-icons spec-icon">security</span> Security
+                                                        <i class="bi bi-shield-check spec-icon"></i> Security
                                                     </button>
                                                 </h2>
                                                 <div id="collapseSecurity" class="accordion-collapse collapse" aria-labelledby="headingSecurity" data-bs-parent="#specsAccordion2">
@@ -371,7 +371,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingPower">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePower" aria-expanded="false" aria-controls="collapsePower">
-                                                        <span class="material-icons spec-icon">bolt</span> Power Backup
+                                                        <i class="bi bi-lightning-charge spec-icon"></i> Power Backup
                                                     </button>
                                                 </h2>
                                                 <div id="collapsePower" class="accordion-collapse collapse" aria-labelledby="headingPower" data-bs-parent="#specsAccordion2">
@@ -383,7 +383,7 @@ while ( have_posts() ) : the_post();
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingLandscape">
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLandscape" aria-expanded="false" aria-controls="collapseLandscape">
-                                                        <span class="material-icons spec-icon">park</span> Landscaping
+                                                        <i class="bi bi-tree spec-icon"></i> Landscaping
                                                     </button>
                                                 </h2>
                                                 <div id="collapseLandscape" class="accordion-collapse collapse" aria-labelledby="headingLandscape" data-bs-parent="#specsAccordion2">
