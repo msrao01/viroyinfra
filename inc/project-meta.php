@@ -18,8 +18,10 @@ function viroyinfra_project_details_callback($post) {
 
     $location = get_post_meta($post->ID, '_project_location', true);
     $description = get_post_meta($post->ID, '_project_description', true);
-    $gallery = get_post_meta($post->ID, '_project_gallery', true);
-    $floor_plans = get_post_meta($post->ID, '_floor_plans_gallery', true);
+
+    // Get stored IDs
+    $gallery_ids = get_post_meta($post->ID, '_project_gallery', true);
+    $floor_plans_ids = get_post_meta($post->ID, '_floor_plans_gallery', true);
 
     ?>
     <p>
@@ -32,16 +34,54 @@ function viroyinfra_project_details_callback($post) {
         <textarea id="project_description" name="project_description" class="widefat" rows="5"><?php echo esc_textarea($description); ?></textarea>
     </p>
 
-    <p>
-        <label for="project_gallery"><strong><?php _e('Project Gallery (Comma separated image URLs)', 'viroyinfra'); ?></strong></label><br>
-        <textarea id="project_gallery" name="project_gallery" class="widefat" rows="3"><?php echo esc_textarea($gallery); ?></textarea>
-        <p class="description"><?php _e('Enter image URLs separated by commas.', 'viroyinfra'); ?></p>
-    </p>
+    <hr>
 
     <p>
-        <label for="floor_plans_gallery"><strong><?php _e('Floor Plans Gallery (Comma separated image URLs)', 'viroyinfra'); ?></strong></label><br>
-        <textarea id="floor_plans_gallery" name="floor_plans_gallery" class="widefat" rows="3"><?php echo esc_textarea($floor_plans); ?></textarea>
-        <p class="description"><?php _e('Enter image URLs separated by commas.', 'viroyinfra'); ?></p>
+        <strong><?php _e('Project Gallery', 'viroyinfra'); ?></strong><br>
+        <input type="button" class="button upload-project-gallery" value="<?php _e('Add Images', 'viroyinfra'); ?>">
+        <input type="hidden" id="project_gallery" name="project_gallery" value="<?php echo esc_attr($gallery_ids); ?>">
+
+        <div id="project_gallery_preview" style="margin-top: 10px;">
+            <?php
+            if ($gallery_ids) {
+                $ids = explode(',', $gallery_ids);
+                foreach ($ids as $id) {
+                    $img = wp_get_attachment_image_src($id, 'thumbnail');
+                    if ($img) {
+                        echo '<div class="image-preview-item" style="display:inline-block; margin:5px; position:relative;">';
+                        echo '<img src="' . esc_url($img[0]) . '" style="max-width:100px; height:auto; border:1px solid #ccc;">';
+                        echo '<a href="#" class="remove-image" data-id="' . esc_attr($id) . '" style="position:absolute; top:0; right:0; background:red; color:white; text-decoration:none; padding:0 5px;">&times;</a>';
+                        echo '</div>';
+                    }
+                }
+            }
+            ?>
+        </div>
+    </p>
+
+    <hr>
+
+    <p>
+        <strong><?php _e('Floor Plans Gallery', 'viroyinfra'); ?></strong><br>
+        <input type="button" class="button upload-floor-plans" value="<?php _e('Add Floor Plans', 'viroyinfra'); ?>">
+        <input type="hidden" id="floor_plans_gallery" name="floor_plans_gallery" value="<?php echo esc_attr($floor_plans_ids); ?>">
+
+        <div id="floor_plans_gallery_preview" style="margin-top: 10px;">
+            <?php
+            if ($floor_plans_ids) {
+                $ids = explode(',', $floor_plans_ids);
+                foreach ($ids as $id) {
+                    $img = wp_get_attachment_image_src($id, 'thumbnail');
+                    if ($img) {
+                        echo '<div class="image-preview-item" style="display:inline-block; margin:5px; position:relative;">';
+                        echo '<img src="' . esc_url($img[0]) . '" style="max-width:100px; height:auto; border:1px solid #ccc;">';
+                        echo '<a href="#" class="remove-image" data-id="' . esc_attr($id) . '" style="position:absolute; top:0; right:0; background:red; color:white; text-decoration:none; padding:0 5px;">&times;</a>';
+                        echo '</div>';
+                    }
+                }
+            }
+            ?>
+        </div>
     </p>
     <?php
 }
@@ -71,15 +111,16 @@ function viroyinfra_save_project_details($post_id) {
         update_post_meta($post_id, '_project_description', sanitize_textarea_field($_POST['project_description']));
     }
 
-    // Save Gallery
+    // Save Gallery (Comma separated IDs)
     if (isset($_POST['project_gallery'])) {
-        $gallery_raw = sanitize_textarea_field($_POST['project_gallery']);
+        // Sanitize allows comma separated numbers
+        $gallery_raw = sanitize_text_field($_POST['project_gallery']);
         update_post_meta($post_id, '_project_gallery', $gallery_raw);
     }
 
-    // Save Floor Plans
+    // Save Floor Plans (Comma separated IDs)
     if (isset($_POST['floor_plans_gallery'])) {
-        $floor_plans_raw = sanitize_textarea_field($_POST['floor_plans_gallery']);
+        $floor_plans_raw = sanitize_text_field($_POST['floor_plans_gallery']);
         update_post_meta($post_id, '_floor_plans_gallery', $floor_plans_raw);
     }
 }

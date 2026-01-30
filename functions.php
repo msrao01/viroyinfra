@@ -163,6 +163,16 @@ function viroyinfra_register_project_cpt() {
 }
 add_action('init', 'viroyinfra_register_project_cpt');
 
+// Enqueue Admin Scripts
+function viroyinfra_admin_scripts() {
+    global $typenow;
+    if ($typenow == 'project') {
+        wp_enqueue_media();
+        wp_enqueue_script('viroyinfra_admin_upload', get_template_directory_uri() . '/js/admin-media-upload.js', array('jquery'), '1.0', true);
+    }
+}
+add_action('admin_enqueue_scripts', 'viroyinfra_admin_scripts');
+
 // AJAX Load More Projects Handler
 function viroyinfra_ajax_load_more_projects() {
     check_ajax_referer('load_more_projects_nonce', 'security');

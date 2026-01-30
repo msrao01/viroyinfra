@@ -13,12 +13,12 @@ while ( have_posts() ) : the_post();
     $location = get_post_meta(get_the_ID(), '_project_location', true);
     $extra_description = get_post_meta(get_the_ID(), '_project_description', true);
 
-    // Galleries (Comma separated URLs)
+    // Galleries (Comma separated IDs)
     $gallery_raw = get_post_meta(get_the_ID(), '_project_gallery', true);
-    $gallery_images = $gallery_raw ? array_map('trim', explode(',', $gallery_raw)) : array();
+    $gallery_ids = $gallery_raw ? explode(',', $gallery_raw) : array();
 
     $floor_plans_raw = get_post_meta(get_the_ID(), '_floor_plans_gallery', true);
-    $floor_plans = $floor_plans_raw ? array_map('trim', explode(',', $floor_plans_raw)) : array();
+    $floor_plans_ids = $floor_plans_raw ? explode(',', $floor_plans_raw) : array();
 
     // Taxonomy Terms
     $status_terms = get_the_terms(get_the_ID(), 'project_status');
@@ -33,8 +33,8 @@ while ( have_posts() ) : the_post();
         <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active"></button>
-                <?php if (!empty($gallery_images)) :
-                    foreach ($gallery_images as $index => $img_url) : ?>
+                <?php if (!empty($gallery_ids)) :
+                    foreach ($gallery_ids as $index => $id) : ?>
                     <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="<?php echo $index + 1; ?>"></button>
                 <?php endforeach; endif; ?>
             </div>
@@ -50,12 +50,15 @@ while ( have_posts() ) : the_post();
                     </div>
                 </div>
 
-                <?php if (!empty($gallery_images)) :
-                    foreach ($gallery_images as $img_url) : ?>
+                <?php if (!empty($gallery_ids)) :
+                    foreach ($gallery_ids as $id) :
+                        $img_url = wp_get_attachment_image_url($id, 'full');
+                        if ($img_url) :
+                    ?>
                     <div class="carousel-item">
                         <img src="<?php echo esc_url($img_url); ?>" class="d-block w-100 hero-img" alt="Gallery Image">
                     </div>
-                <?php endforeach; else: ?>
+                <?php endif; endforeach; else: ?>
                     <!-- Static Fallback if no gallery -->
                     <div class="carousel-item">
                         <img src="<?php echo get_template_directory_uri(); ?>/img/kitchen.svg" class="d-block w-100 hero-img" alt="Kitchen">
@@ -150,14 +153,17 @@ while ( have_posts() ) : the_post();
                     <div id="gallery" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Project Gallery</h3>
                         <div class="row g-3">
-                            <?php if (!empty($gallery_images)) :
-                                foreach ($gallery_images as $index => $img_url) : ?>
+                            <?php if (!empty($gallery_ids)) :
+                                foreach ($gallery_ids as $index => $id) :
+                                    $img_url = wp_get_attachment_image_url($id, 'large');
+                                    if ($img_url) :
+                                    ?>
                                     <div class="col-md-4">
                                         <div class="gallery-item overflow-hidden rounded shadow-sm h-100">
                                             <img src="<?php echo esc_url($img_url); ?>" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery <?php echo $index; ?>" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($img_url); ?>">
                                         </div>
                                     </div>
-                                <?php endforeach;
+                                <?php endif; endforeach;
                             else : ?>
                                 <!-- Fallback Static Gallery -->
                                 <div class="col-md-8">
@@ -177,25 +183,55 @@ while ( have_posts() ) : the_post();
                         </div>
                     </div>
 
-                    <!-- 3. Floor Plans -->
+                    <!-- 3. Floor Plans (Carousel with 2 items per row) -->
                     <div id="floor-plans" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Floor Plans</h3>
-                        <div class="row g-4">
-                            <?php if (!empty($floor_plans)) :
-                                foreach ($floor_plans as $index => $plan_url) : ?>
-                                <div class="col-md-6" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
-                                    <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($plan_url); ?>">
-                                        <div class="overflow-hidden rounded-top">
-                                            <img src="<?php echo esc_url($plan_url); ?>" class="card-img-top gallery-img" alt="Floor Plan <?php echo $index + 1; ?>">
-                                        </div>
-                                        <div class="card-body text-center py-4">
-                                            <h5 class="card-title font-playfair">Floor Plan <?php echo $index + 1; ?></h5>
-                                            <p class="text-muted small mb-0">Click to enlarge</p>
+
+                        <?php if (!empty($floor_plans_ids)) : ?>
+                            <div id="floorPlansCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <?php
+                                    // Chunk the array into groups of 2
+                                    $chunks = array_chunk($floor_plans_ids, 2);
+                                    foreach ($chunks as $index => $chunk) :
+                                        $active_class = ($index === 0) ? 'active' : '';
+                                    ?>
+                                    <div class="carousel-item <?php echo $active_class; ?>">
+                                        <div class="row g-4">
+                                            <?php foreach ($chunk as $plan_id) :
+                                                $plan_url = wp_get_attachment_image_url($plan_id, 'large');
+                                                if ($plan_url) :
+                                            ?>
+                                            <div class="col-md-6">
+                                                <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($plan_url); ?>">
+                                                    <div class="overflow-hidden rounded-top">
+                                                        <img src="<?php echo esc_url($plan_url); ?>" class="card-img-top gallery-img" alt="Floor Plan">
+                                                    </div>
+                                                    <div class="card-body text-center py-4">
+                                                        <h5 class="card-title font-playfair">Floor Plan</h5>
+                                                        <p class="text-muted small mb-0">Click to enlarge</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php endif; endforeach; ?>
                                         </div>
                                     </div>
+                                    <?php endforeach; ?>
                                 </div>
-                            <?php endforeach; else : ?>
-                                <!-- Fallback Static Floor Plans -->
+                                <?php if (count($chunks) > 1) : ?>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#floorPlansCarousel" data-bs-slide="prev" style="width: 5%; filter: invert(1);">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#floorPlansCarousel" data-bs-slide="next" style="width: 5%; filter: invert(1);">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        <?php else : ?>
+                            <!-- Fallback Static Floor Plans -->
+                            <div class="row g-4">
                                 <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
                                     <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg">
                                         <div class="overflow-hidden rounded-top">
@@ -218,8 +254,8 @@ while ( have_posts() ) : the_post();
                                         </div>
                                     </div>
                                 </div>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <!-- 4. Amenities (Placeholder/Hardcoded for now) -->
