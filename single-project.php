@@ -3,10 +3,29 @@
 get_header();
 
 while ( have_posts() ) : the_post();
+    // Featured Image
     $featured_img_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
     if (!$featured_img_url) {
         $featured_img_url = get_template_directory_uri() . '/img/living-room.svg';
     }
+
+    // Meta Fields
+    $location = get_post_meta(get_the_ID(), '_project_location', true);
+    $extra_description = get_post_meta(get_the_ID(), '_project_description', true);
+
+    // Galleries (Comma separated URLs)
+    $gallery_raw = get_post_meta(get_the_ID(), '_project_gallery', true);
+    $gallery_images = $gallery_raw ? array_map('trim', explode(',', $gallery_raw)) : array();
+
+    $floor_plans_raw = get_post_meta(get_the_ID(), '_floor_plans_gallery', true);
+    $floor_plans = $floor_plans_raw ? array_map('trim', explode(',', $floor_plans_raw)) : array();
+
+    // Taxonomy Terms
+    $status_terms = get_the_terms(get_the_ID(), 'project_status');
+    $status_name = ($status_terms && !is_wp_error($status_terms)) ? $status_terms[0]->name : '';
+
+    $category_terms = get_the_terms(get_the_ID(), 'project_category');
+    $category_name = ($category_terms && !is_wp_error($category_terms)) ? $category_terms[0]->name : '';
 ?>
 
     <!-- Hero Section / Carousel -->
@@ -14,8 +33,10 @@ while ( have_posts() ) : the_post();
         <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="2"></button>
+                <?php if (!empty($gallery_images)) :
+                    foreach ($gallery_images as $index => $img_url) : ?>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="<?php echo $index + 1; ?>"></button>
+                <?php endforeach; endif; ?>
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -23,23 +44,26 @@ while ( have_posts() ) : the_post();
                     <div class="carousel-caption d-none d-md-block">
                         <h5 class="display-4 font-playfair"><?php the_title(); ?></h5>
                         <p class="lead"><?php echo get_the_excerpt(); ?></p>
+                        <?php if ($status_name) : ?>
+                            <span class="badge bg-warning text-dark mt-2"><?php echo esc_html($status_name); ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
-                <!-- Static Placeholder Slides (since no gallery field exists) -->
-                <div class="carousel-item">
-                    <img src="<?php echo get_template_directory_uri(); ?>/img/kitchen.svg" class="d-block w-100 hero-img" alt="Kitchen">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5 class="display-4 font-playfair">Gourmet Experience</h5>
-                        <p class="lead">State-of-the-art culinary space</p>
+
+                <?php if (!empty($gallery_images)) :
+                    foreach ($gallery_images as $img_url) : ?>
+                    <div class="carousel-item">
+                        <img src="<?php echo esc_url($img_url); ?>" class="d-block w-100 hero-img" alt="Gallery Image">
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="<?php echo get_template_directory_uri(); ?>/img/exterior.svg" class="d-block w-100 hero-img" alt="Exterior">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5 class="display-4 font-playfair">Private Oasis</h5>
-                        <p class="lead">Serene landscapes and outdoor luxury</p>
+                <?php endforeach; else: ?>
+                    <!-- Static Fallback if no gallery -->
+                    <div class="carousel-item">
+                        <img src="<?php echo get_template_directory_uri(); ?>/img/kitchen.svg" class="d-block w-100 hero-img" alt="Kitchen">
                     </div>
-                </div>
+                    <div class="carousel-item">
+                        <img src="<?php echo get_template_directory_uri(); ?>/img/exterior.svg" class="d-block w-100 hero-img" alt="Exterior">
+                    </div>
+                <?php endif; ?>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -74,11 +98,16 @@ while ( have_posts() ) : the_post();
                     <!-- Quick Info -->
                     <div class="mb-5 text-center" data-aos="fade-up">
                         <h1 class="display-4 font-playfair mb-3"><?php the_title(); ?></h1>
-                        <p class="lead text-muted mb-2"><i class="bi bi-geo-alt-fill text-accent"></i> 123 Palm Avenue, Beverly Hills, CA 90210</p>
-                        <h2 class="text-accent price-tag">$4,500,000</h2>
+                        <p class="lead text-muted mb-2">
+                            <i class="bi bi-geo-alt-fill text-accent"></i>
+                            <?php echo $location ? esc_html($location) : 'Location Info'; ?>
+                        </p>
+                        <?php if ($category_name) : ?>
+                            <p class="text-uppercase small text-muted"><?php echo esc_html($category_name); ?></p>
+                        <?php endif; ?>
                     </div>
 
-                    <!-- Key Stats -->
+                    <!-- Key Stats (Static Placeholders for now as per plan, but could be meta) -->
                     <div class="row text-center mb-5 justify-content-center" data-aos="fade-up" data-aos-delay="100">
                         <div class="col-md-3 col-4">
                             <div class="stat-item">
@@ -108,60 +137,92 @@ while ( have_posts() ) : the_post();
                                 <div class="lead-text">
                                     <?php the_content(); ?>
                                 </div>
+                                <?php if ($extra_description) : ?>
+                                    <div class="mt-4 text-muted">
+                                        <?php echo wp_kses_post(wpautop($extra_description)); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 2. Project Gallery (Placeholder) -->
+                    <!-- 2. Project Gallery -->
                     <div id="gallery" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Project Gallery</h3>
                         <div class="row g-3">
-                            <div class="col-md-8">
-                                <div class="gallery-item overflow-hidden rounded shadow-sm h-100">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-1.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 1" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-1.svg">
+                            <?php if (!empty($gallery_images)) :
+                                foreach ($gallery_images as $index => $img_url) : ?>
+                                    <div class="col-md-4">
+                                        <div class="gallery-item overflow-hidden rounded shadow-sm h-100">
+                                            <img src="<?php echo esc_url($img_url); ?>" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery <?php echo $index; ?>" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($img_url); ?>">
+                                        </div>
+                                    </div>
+                                <?php endforeach;
+                            else : ?>
+                                <!-- Fallback Static Gallery -->
+                                <div class="col-md-8">
+                                    <div class="gallery-item overflow-hidden rounded shadow-sm h-100">
+                                        <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-1.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 1" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-1.svg">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4 d-flex flex-column gap-3">
-                                <div class="gallery-item overflow-hidden rounded shadow-sm flex-grow-1">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-2.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 2" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-2.svg">
+                                <div class="col-md-4 d-flex flex-column gap-3">
+                                    <div class="gallery-item overflow-hidden rounded shadow-sm flex-grow-1">
+                                        <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-2.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 2" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-2.svg">
+                                    </div>
+                                    <div class="gallery-item overflow-hidden rounded shadow-sm flex-grow-1">
+                                        <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-3.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 3" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-3.svg">
+                                    </div>
                                 </div>
-                                <div class="gallery-item overflow-hidden rounded shadow-sm flex-grow-1">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-3.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 3" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-3.svg">
-                                </div>
-                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
-                    <!-- 3. Floor Plans (Placeholder) -->
+                    <!-- 3. Floor Plans -->
                     <div id="floor-plans" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Floor Plans</h3>
                         <div class="row g-4">
-                            <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
-                                <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg">
-                                    <div class="overflow-hidden rounded-top">
-                                        <img src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg" class="card-img-top gallery-img" alt="Ground Floor">
-                                    </div>
-                                    <div class="card-body text-center py-4">
-                                        <h5 class="card-title font-playfair">Ground Floor</h5>
-                                        <p class="text-muted small mb-0">Click to enlarge</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
-                                <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/first-floor.svg">
-                                    <div class="overflow-hidden rounded-top">
-                                        <img src="<?php echo get_template_directory_uri(); ?>/img/first-floor.svg" class="card-img-top gallery-img" alt="First Floor">
-                                    </div>
-                                    <div class="card-body text-center py-4">
-                                        <h5 class="card-title font-playfair">First Floor</h5>
-                                        <p class="text-muted small mb-0">Click to enlarge</p>
+                            <?php if (!empty($floor_plans)) :
+                                foreach ($floor_plans as $index => $plan_url) : ?>
+                                <div class="col-md-6" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
+                                    <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo esc_url($plan_url); ?>">
+                                        <div class="overflow-hidden rounded-top">
+                                            <img src="<?php echo esc_url($plan_url); ?>" class="card-img-top gallery-img" alt="Floor Plan <?php echo $index + 1; ?>">
+                                        </div>
+                                        <div class="card-body text-center py-4">
+                                            <h5 class="card-title font-playfair">Floor Plan <?php echo $index + 1; ?></h5>
+                                            <p class="text-muted small mb-0">Click to enlarge</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; else : ?>
+                                <!-- Fallback Static Floor Plans -->
+                                <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
+                                    <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg">
+                                        <div class="overflow-hidden rounded-top">
+                                            <img src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg" class="card-img-top gallery-img" alt="Ground Floor">
+                                        </div>
+                                        <div class="card-body text-center py-4">
+                                            <h5 class="card-title font-playfair">Ground Floor</h5>
+                                            <p class="text-muted small mb-0">Click to enlarge</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
+                                    <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/first-floor.svg">
+                                        <div class="overflow-hidden rounded-top">
+                                            <img src="<?php echo get_template_directory_uri(); ?>/img/first-floor.svg" class="card-img-top gallery-img" alt="First Floor">
+                                        </div>
+                                        <div class="card-body text-center py-4">
+                                            <h5 class="card-title font-playfair">First Floor</h5>
+                                            <p class="text-muted small mb-0">Click to enlarge</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
-                    <!-- 4. Amenities (Placeholder) -->
+                    <!-- 4. Amenities (Placeholder/Hardcoded for now) -->
                     <div id="amenities" class="section-spacer">
                         <h3 class="section-title text-center" data-aos="fade-up">Amenities</h3>
                         <div class="row g-4">
@@ -232,7 +293,7 @@ while ( have_posts() ) : the_post();
                         </div>
                     </div>
 
-                    <!-- 5. Specification (Accordion Style - Placeholder) -->
+                    <!-- 5. Specification (Accordion Style - Placeholder/Hardcoded for now) -->
                     <div id="specs" class="section-spacer">
                         <h3 class="section-title text-center" data-aos="fade-up">Specifications</h3>
                         <div class="row justify-content-center">
@@ -397,13 +458,18 @@ while ( have_posts() ) : the_post();
                         </div>
                     </div>
 
-                    <!-- 6. Location (Placeholder) -->
+                    <!-- 6. Location (Dynamic via Meta) -->
                     <div id="location" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Location</h3>
+                        <?php if ($location) : ?>
+                            <div class="text-center mb-4"><h5 class="font-playfair"><?php echo esc_html($location); ?></h5></div>
+                        <?php endif; ?>
+
                         <div class="row g-4">
                             <!-- Map Section (2/3) -->
                             <div class="col-lg-8">
                                 <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
+                                    <!-- Placeholder Iframe (Would need a real meta field for map embed URL to make this dynamic) -->
                                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.733248043701!2d-118.40035638478913!3d34.072091980600556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2bc04d6d147ab%3A0xd6c7c379fd081ed1!2sBeverly%20Hills%2C%20CA%2090210!5e0!3m2!1sen!2sus!4v1620123456789!5m2!1sen!2sus" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                                 </div>
                             </div>

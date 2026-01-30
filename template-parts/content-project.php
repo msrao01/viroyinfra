@@ -21,6 +21,11 @@ $thumbnail = get_the_post_thumbnail_url(get_the_ID(), 'large');
 if (!$thumbnail) {
     $thumbnail = get_template_directory_uri() . '/img/modern-luxury-villa-large.svg';
 }
+
+// Get dynamic values
+$location = get_post_meta(get_the_ID(), '_project_location', true);
+$status_terms = get_the_terms(get_the_ID(), 'project_status');
+$status = ($status_terms && !is_wp_error($status_terms)) ? $status_terms[0]->name : 'Available';
 ?>
 <!-- Project Item -->
 <div class="card border-0 shadow-sm mb-5 overflow-hidden project-item" data-aos="fade-up">
@@ -34,7 +39,7 @@ if (!$thumbnail) {
             <div class="card-body p-4 p-lg-5 <?php echo $text_align; ?>">
                 <span class="badge bg-navy text-white mb-3">Featured</span>
                 <h3 class="card-title font-playfair mb-2"><?php the_title(); ?></h3>
-                <p class="text-muted mb-4"><i class="bi bi-geo-alt-fill text-accent"></i> Location Info</p>
+                <p class="text-muted mb-4"><i class="bi bi-geo-alt-fill text-accent"></i> <?php echo $location ? esc_html($location) : 'Location Info'; ?></p>
 
                 <div class="project-details mb-4">
                     <div class="row g-3 <?php echo $is_even ? 'justify-content-md-end' : ''; ?>">
@@ -42,10 +47,9 @@ if (!$thumbnail) {
                             <p class="mb-1 text-muted small text-uppercase">Description</p>
                             <p class="fw-semibold"><?php echo wp_trim_words(get_the_excerpt(), 10); ?></p>
                         </div>
-                        <!-- Placeholder stats -->
                         <div class="col-6">
                             <p class="mb-1 text-muted small text-uppercase">Status</p>
-                            <p class="fw-semibold text-success">Available</p>
+                            <p class="fw-semibold text-success"><?php echo esc_html($status); ?></p>
                         </div>
                     </div>
                 </div>

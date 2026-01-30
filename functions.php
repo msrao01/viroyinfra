@@ -111,9 +111,55 @@ function viroyinfra_register_project_cpt() {
         'menu_icon'             => 'dashicons-building',
         'show_in_nav_menus'     => true,
         'has_archive'           => true,
-        'rewrite'               => array('slug' => 'projects'),
+        'rewrite'               => array('slug' => 'projects'), // Keep a distinct slug, strip it via filter
     );
     register_post_type('project', $args);
+
+    // Register Custom Taxonomies
+
+    // Project Category
+    register_taxonomy('project_category', 'project', array(
+        'labels' => array(
+            'name' => _x('Project Categories', 'taxonomy general name', 'viroyinfra'),
+            'singular_name' => _x('Project Category', 'taxonomy singular name', 'viroyinfra'),
+            'search_items' => __('Search Project Categories', 'viroyinfra'),
+            'all_items' => __('All Project Categories', 'viroyinfra'),
+            'parent_item' => __('Parent Project Category', 'viroyinfra'),
+            'parent_item_colon' => __('Parent Project Category:', 'viroyinfra'),
+            'edit_item' => __('Edit Project Category', 'viroyinfra'),
+            'update_item' => __('Update Project Category', 'viroyinfra'),
+            'add_new_item' => __('Add New Project Category', 'viroyinfra'),
+            'new_item_name' => __('New Project Category Name', 'viroyinfra'),
+            'menu_name' => __('Categories', 'viroyinfra'),
+        ),
+        'hierarchical' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'query_var' => true,
+        'rewrite' => array('slug' => 'project-category'),
+    ));
+
+    // Project Status
+    register_taxonomy('project_status', 'project', array(
+        'labels' => array(
+            'name' => _x('Project Statuses', 'taxonomy general name', 'viroyinfra'),
+            'singular_name' => _x('Project Status', 'taxonomy singular name', 'viroyinfra'),
+            'search_items' => __('Search Project Statuses', 'viroyinfra'),
+            'all_items' => __('All Project Statuses', 'viroyinfra'),
+            'parent_item' => __('Parent Project Status', 'viroyinfra'),
+            'parent_item_colon' => __('Parent Project Status:', 'viroyinfra'),
+            'edit_item' => __('Edit Project Status', 'viroyinfra'),
+            'update_item' => __('Update Project Status', 'viroyinfra'),
+            'add_new_item' => __('Add New Project Status', 'viroyinfra'),
+            'new_item_name' => __('New Project Status Name', 'viroyinfra'),
+            'menu_name' => __('Status', 'viroyinfra'),
+        ),
+        'hierarchical' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'query_var' => true,
+        'rewrite' => array('slug' => 'project-status'),
+    ));
 }
 add_action('init', 'viroyinfra_register_project_cpt');
 
@@ -151,4 +197,10 @@ function viroyinfra_ajax_load_more_projects() {
 }
 add_action('wp_ajax_load_more_projects', 'viroyinfra_ajax_load_more_projects');
 add_action('wp_ajax_nopriv_load_more_projects', 'viroyinfra_ajax_load_more_projects');
+
+// Include Project Meta Boxes
+require_once get_template_directory() . '/inc/project-meta.php';
+
+// Include CPT Rewrite Logic
+require_once get_template_directory() . '/inc/cpt-rewrite.php';
 ?>
