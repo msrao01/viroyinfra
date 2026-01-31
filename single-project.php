@@ -127,30 +127,16 @@ get_header();
                     <!-- 3. Floor Plans -->
                     <div id="floor-plans" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Floor Plans</h3>
-                        <div class="row g-4">
-                            <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
-                                <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg">
-                                    <div class="overflow-hidden rounded-top">
-                                        <img src="<?php echo get_template_directory_uri(); ?>/img/ground-floor.svg" class="card-img-top gallery-img" alt="Ground Floor">
-                                    </div>
-                                    <div class="card-body text-center py-4">
-                                        <h5 class="card-title font-playfair">Ground Floor</h5>
-                                        <p class="text-muted small mb-0">Click to enlarge</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
-                                <div class="card plan-card border-0 shadow-sm h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/first-floor.svg">
-                                    <div class="overflow-hidden rounded-top">
-                                        <img src="<?php echo get_template_directory_uri(); ?>/img/first-floor.svg" class="card-img-top gallery-img" alt="First Floor">
-                                    </div>
-                                    <div class="card-body text-center py-4">
-                                        <h5 class="card-title font-playfair">First Floor</h5>
-                                        <p class="text-muted small mb-0">Click to enlarge</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+                        $floor_plans = get_post_meta(get_the_ID(), '_viroyinfra_floor_plans', true);
+                        if (!empty($floor_plans)) {
+                            viroyinfra_render_gallery($floor_plans);
+                        } else {
+                            // Fallback content or message can go here.
+                            // For now, we display a placeholder message if no plans are uploaded.
+                            echo '<p class="text-center text-muted">No floor plans available.</p>';
+                        }
+                        ?>
                     </div>
 
                     <!-- 4. Amenities (Card Style) -->
