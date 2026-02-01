@@ -14,21 +14,21 @@ get_header();
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/living-room.svg" class="d-block w-100 hero-img" alt="Living Room">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-block">
                         <h5 class="display-4 font-playfair">Exquisite Living</h5>
                         <p class="lead">Where luxury meets comfort in Beverly Hills</p>
                     </div>
                 </div>
                 <div class="carousel-item">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/kitchen.svg" class="d-block w-100 hero-img" alt="Kitchen">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-block">
                         <h5 class="display-4 font-playfair">Gourmet Experience</h5>
                         <p class="lead">State-of-the-art culinary space</p>
                     </div>
                 </div>
                 <div class="carousel-item">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/exterior.svg" class="d-block w-100 hero-img" alt="Exterior">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-block">
                         <h5 class="display-4 font-playfair">Private Oasis</h5>
                         <p class="lead">Serene landscapes and outdoor luxury</p>
                     </div>

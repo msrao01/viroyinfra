@@ -340,3 +340,20 @@ footer {
 .carousel-inner {
     padding-bottom: 20px;
 }
+
+/* Mobile Hero Caption Styles */
+@media (max-width: 768px) {
+    .carousel-caption {
+        bottom: 10%;
+        background: rgba(0, 0, 0, 0.4); /* Add background for readability */
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    .carousel-caption h5 {
+        font-size: 1.5rem; /* Smaller font on mobile */
+    }
+    .carousel-caption p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+}
