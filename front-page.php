@@ -81,7 +81,7 @@
 
             <!-- Featured Projects Section -->
             <div id="featured" class="section-spacer">
-                <h3 class="section-title text-center" data-aos="fade-up">Featured Projects</h3>
+                <h3 class="section-title text-center" data-aos="fade-up"><?php _e('Featured Projects', 'viroyinfra'); ?></h3>
                 <div class="row g-4 justify-content-center">
                     <?php
                     $args = array(
@@ -91,34 +91,12 @@
                     $projects_query = new WP_Query($args);
 
                     if ($projects_query->have_posts()) :
-                        $delay = 100;
                         while ($projects_query->have_posts()) : $projects_query->the_post();
-                            $thumbnail_url = get_the_post_thumbnail_url() ?: get_template_directory_uri() . '/img/modern-luxury-villa-thumb.svg';
-                    ?>
-                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
-                        <div class="card h-100 border-0 shadow-sm project-card">
-                            <div class="overflow-hidden rounded-top position-relative">
-                                <a href="<?php the_permalink(); ?>">
-                                    <img src="<?php echo esc_url($thumbnail_url); ?>" class="card-img-top gallery-img object-fit-cover" alt="<?php the_title(); ?>" style="height: 250px;">
-                                </a>
-                                <div class="position-absolute top-0 end-0 m-3">
-                                    <span class="badge bg-navy text-white p-2">For Sale</span>
-                                </div>
-                            </div>
-                            <div class="card-body p-4 text-center">
-                                <h5 class="card-title font-playfair mb-2"><a href="<?php the_permalink(); ?>" class="text-decoration-none text-dark"><?php the_title(); ?></a></h5>
-                                <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill text-accent"></i> Location Info</p>
-                                <p class="card-text text-muted mb-4"><?php echo get_the_excerpt(); ?></p>
-                                <a href="<?php the_permalink(); ?>" class="btn btn-outline-dark btn-sm rounded-pill px-4">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
-                        $delay += 100;
+                            get_template_part('template-parts/content', 'project');
                         endwhile;
                         wp_reset_postdata();
                     else :
-                        echo '<p class="text-center text-muted">No projects found.</p>';
+                        echo '<p class="text-center text-muted">' . __('No projects found.', 'viroyinfra') . '</p>';
                     endif;
                     ?>
                 </div>

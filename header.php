@@ -6,6 +6,7 @@
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
+    <?php wp_body_open(); ?>
 
     <!-- Main Navbar -->
     <?php
@@ -33,46 +34,60 @@
 
                     <!-- Column 2 (2/4): Menu -->
                     <div class="col-lg-6 text-center">
+                        <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'primary',
+                            'container'      => false,
+                            'menu_class'     => 'navbar-nav justify-content-center',
+                            'fallback_cb'    => false, // Fallback to manual if menu not set
+                            'depth'          => 2,
+                            // Note: A Custom Walker would be needed for the full Mega Menu experience.
+                            // For this refactor, we are enabling the standard WP Menu which allows Dropdowns.
+                        ));
+                        ?>
+                        <!-- Fallback Hardcoded Mega Menu (Only if no menu assigned) -->
+                        <?php if ( ! has_nav_menu( 'primary' ) ) : ?>
                         <ul class="navbar-nav justify-content-center">
-                            <li class="nav-item"><a class="nav-link <?php echo is_front_page() ? 'active' : ''; ?>" href="<?php echo home_url(); ?>">Home</a></li>
+                            <li class="nav-item"><a class="nav-link <?php echo is_front_page() ? 'active' : ''; ?>" href="<?php echo home_url(); ?>"><?php _e('Home', 'viroyinfra'); ?></a></li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <?php echo is_page_template('page-projects.php') || is_singular('project') ? 'active' : ''; ?>" href="<?php echo home_url('/properties'); ?>" id="propertiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Properties
+                                <a class="nav-link dropdown-toggle" href="#" id="propertiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <?php _e('Properties', 'viroyinfra'); ?>
                                 </a>
                                 <div class="dropdown-menu mega-menu" aria-labelledby="propertiesDropdown">
                                     <div class="container">
                                         <div class="row">
+                                            <!-- Dynamic Latest 2 Projects -->
+                                            <?php
+                                            $latest_projects = new WP_Query(array(
+                                                'post_type' => 'project',
+                                                'posts_per_page' => 2
+                                            ));
+                                            if ($latest_projects->have_posts()) :
+                                                while ($latest_projects->have_posts()) : $latest_projects->the_post();
+                                                    $thumb = get_the_post_thumbnail_url() ?: get_template_directory_uri() . '/img/modern-luxury-villa-thumb.svg';
+                                            ?>
                                             <div class="col-md-3">
-                                                <a href="<?php echo home_url('/project/luxury-villa'); ?>" class="text-decoration-none mega-menu-link">
-                                                    <img src="<?php echo get_template_directory_uri(); ?>/img/luxury-villa-menu.svg" class="img-fluid mega-menu-img mb-2" alt="Project 1">
-                                                    <h6 class="font-playfair text-dark">Luxury Villa</h6>
+                                                <a href="<?php the_permalink(); ?>" class="text-decoration-none mega-menu-link">
+                                                    <img src="<?php echo esc_url($thumb); ?>" class="img-fluid mega-menu-img mb-2" alt="<?php the_title(); ?>">
+                                                    <h6 class="font-playfair text-dark"><?php the_title(); ?></h6>
                                                 </a>
                                             </div>
-                                            <div class="col-md-3">
-                                                <a href="<?php echo home_url('/project/city-heights'); ?>" class="text-decoration-none mega-menu-link">
-                                                    <img src="<?php echo get_template_directory_uri(); ?>/img/city-heights-menu.svg" class="img-fluid mega-menu-img mb-2" alt="Project 2">
-                                                    <h6 class="font-playfair text-dark">City Heights</h6>
-                                                </a>
-                                            </div>
+                                            <?php
+                                                endwhile;
+                                                wp_reset_postdata();
+                                            else:
+                                            ?>
+                                            <div class="col-md-12 text-center text-muted"><p><?php _e('No projects found.', 'viroyinfra'); ?></p></div>
+                                            <?php endif; ?>
+
                                             <div class="col-md-6">
                                                 <div class="row">
-                                                    <div class="col-6">
-                                                        <h6 class="font-playfair text-accent mb-3">Completed Projects</h6>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="<?php echo home_url('/projects'); ?>" class="text-muted text-decoration-none hover-accent">Skyline Towers</a></li>
-                                                            <li><a href="<?php echo home_url('/projects'); ?>" class="text-muted text-decoration-none hover-accent">Ocean Breeze</a></li>
-                                                            <li><a href="<?php echo home_url('/projects'); ?>" class="text-muted text-decoration-none hover-accent">Green Valley</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <h6 class="font-playfair text-accent mb-3">Upcoming Projects</h6>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="<?php echo home_url('/projects'); ?>" class="text-muted text-decoration-none hover-accent">Sunset Boulevard</a></li>
-                                                            <li><a href="<?php echo home_url('/projects'); ?>" class="text-muted text-decoration-none hover-accent">Royal Enclave</a></li>
-                                                        </ul>
+                                                    <div class="col-12">
+                                                        <h6 class="font-playfair text-accent mb-3"><?php _e('Our Portfolio', 'viroyinfra'); ?></h6>
+                                                        <p class="text-muted small"><?php _e('Explore our diverse portfolio of residential and commercial properties designed for modern living.', 'viroyinfra'); ?></p>
                                                     </div>
                                                     <div class="col-12 mt-3">
-                                                        <a href="<?php echo home_url('/projects'); ?>" class="btn btn-accent w-100 text-uppercase fw-bold">View All Projects <i class="bi bi-arrow-right ms-2"></i></a>
+                                                        <a href="<?php echo get_post_type_archive_link('project'); ?>" class="btn btn-accent w-100 text-uppercase fw-bold"><?php _e('View All Projects', 'viroyinfra'); ?> <i class="bi bi-arrow-right ms-2"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -80,15 +95,16 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item"><a class="nav-link <?php echo is_page('about') ? 'active' : ''; ?>" href="<?php echo home_url('/about'); ?>">About us</a></li>
-                            <li class="nav-item"><a class="nav-link <?php echo is_page('contact') ? 'active' : ''; ?>" href="<?php echo home_url('/contact'); ?>">Contact Us</a></li>
-                            <li class="nav-item"><a class="nav-link <?php echo is_home() ? 'active' : ''; ?>" href="<?php echo home_url('/blog'); ?>">Blog</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo home_url('/about'); ?>"><?php _e('About us', 'viroyinfra'); ?></a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo home_url('/contact'); ?>"><?php _e('Contact Us', 'viroyinfra'); ?></a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>"><?php _e('Blog', 'viroyinfra'); ?></a></li>
                         </ul>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Column 3 (1/4): CTA Button -->
                     <div class="col-lg-3 text-lg-end text-center mt-3 mt-lg-0 p-0">
-                        <a href="<?php echo home_url('/contact'); ?>" class="btn btn-accent rounded-pill px-4 text-white">Contact Us</a>
+                        <a href="<?php echo home_url('/contact'); ?>" class="btn btn-accent rounded-pill px-4 text-white"><?php _e('Contact Us', 'viroyinfra'); ?></a>
                     </div>
                 </div>
             </div>
