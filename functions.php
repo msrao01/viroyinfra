@@ -168,12 +168,19 @@ function viroyinfra_ajax_load_more_projects() {
 
     $query = new WP_Query($args);
 
+    // Update global query for template parts relying on current_post
+    global $wp_query;
+    $temp_query = $wp_query;
+    $wp_query = $query;
+
     if ($query->have_posts()) :
         while ($query->have_posts()) : $query->the_post();
             get_template_part('template-parts/content', 'project-horizontal');
         endwhile;
     endif;
 
+    // Restore
+    $wp_query = $temp_query;
     wp_reset_postdata();
     die;
 }
