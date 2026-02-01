@@ -16,10 +16,16 @@
         <div class="container">
             <!-- Mobile Logo (Visible < lg) -->
             <a class="navbar-brand d-lg-none" href="<?php echo home_url(); ?>">
-                <img src="<?php echo get_template_directory_uri(); ?>/img/VLv01L.png" alt="VIROY INFRA" height="40">
+                <?php
+                if ( has_custom_logo() ) {
+                    the_custom_logo();
+                } else {
+                    echo '<img src="' . get_template_directory_uri() . '/img/VLv01L.png" alt="VIROY INFRA" height="40">';
+                }
+                ?>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="<?php esc_attr_e('Toggle navigation', 'viroyinfra'); ?>">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -28,7 +34,13 @@
                     <!-- Column 1 (1/4): Logo (Desktop only) -->
                     <div class="col-lg-3 d-none d-lg-block text-start p-0">
                         <a class="navbar-brand m-0" href="<?php echo home_url(); ?>">
-                            <img src="<?php echo get_template_directory_uri(); ?>/img/VLv01L.png" alt="VIROY INFRA" height="40">
+                            <?php
+                            if ( has_custom_logo() ) {
+                                the_custom_logo();
+                            } else {
+                                echo '<img src="' . get_template_directory_uri() . '/img/VLv01L.png" alt="VIROY INFRA" height="40">';
+                            }
+                            ?>
                         </a>
                     </div>
 

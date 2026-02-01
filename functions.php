@@ -151,6 +151,15 @@ add_action('init', 'viroyinfra_register_project_cpt');
 // Include Custom Meta
 require_once get_template_directory() . '/inc/project-meta.php';
 require_once get_template_directory() . '/inc/cpt-rewrite.php';
+require_once get_template_directory() . '/inc/customizer.php';
+
+// Theme Support
+add_theme_support('custom-logo', array(
+    'height'      => 100,
+    'width'       => 400,
+    'flex-height' => true,
+    'flex-width'  => true,
+));
 
 /**
  * AJAX Load More Handler

@@ -117,9 +117,9 @@
                                         </div>
                                         <h4 class="card-title font-playfair mb-3">Head Office</h4>
                                         <div class="contact-info">
-                                            <p class="card-text mb-2"><i class="bi bi-geo-alt-fill text-accent me-2"></i> 100 Real Estate Blvd, City, Country</p>
-                                            <p class="card-text mb-2"><i class="bi bi-telephone-fill text-accent me-2"></i> (123) 456-7890</p>
-                                            <p class="card-text"><i class="bi bi-envelope-fill text-accent me-2"></i> info@viroyinfra.com</p>
+                                            <p class="card-text mb-2"><i class="bi bi-geo-alt-fill text-accent me-2"></i> <?php echo esc_html(get_theme_mod('viroyinfra_address', '100 Real Estate Blvd, City, Country')); ?></p>
+                                            <p class="card-text mb-2"><i class="bi bi-telephone-fill text-accent me-2"></i> <?php echo esc_html(get_theme_mod('viroyinfra_phone', '(123) 456-7890')); ?></p>
+                                            <p class="card-text"><i class="bi bi-envelope-fill text-accent me-2"></i> <?php echo esc_html(get_theme_mod('viroyinfra_email', 'info@viroyinfra.com')); ?></p>
                                         </div>
                                     </div>
                                 </div>

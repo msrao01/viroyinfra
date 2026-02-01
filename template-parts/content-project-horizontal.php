@@ -26,7 +26,7 @@ $badge_class = ($index % 2 !== 0) ? 'bg-secondary' : 'bg-navy'; // Just to vary 
     <div class="row g-0 h-100">
         <div class="col-md-6 overflow-hidden <?php echo esc_attr($order_class); ?>">
             <a href="<?php the_permalink(); ?>">
-                <img src="<?php echo esc_url($thumbnail_url); ?>" class="img-fluid h-100 object-fit-cover gallery-img" alt="<?php the_title(); ?>" style="min-height: 350px; width: 100%;">
+                <img src="<?php echo esc_url($thumbnail_url); ?>" loading="lazy" class="img-fluid h-100 object-fit-cover gallery-img" alt="<?php the_title(); ?>" style="min-height: 350px; width: 100%;">
             </a>
         </div>
         <div class="col-md-6 d-flex align-items-center <?php echo esc_attr($text_order_class); ?>">

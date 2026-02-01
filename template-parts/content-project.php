@@ -21,7 +21,7 @@ $location = get_post_meta(get_the_ID(), '_viroyinfra_location', true) ?: 'Locati
     <div class="card h-100 border-0 shadow-sm project-card">
         <div class="overflow-hidden rounded-top position-relative">
             <a href="<?php the_permalink(); ?>">
-                <img src="<?php echo esc_url($thumbnail_url); ?>" class="card-img-top gallery-img object-fit-cover" alt="<?php the_title(); ?>" style="height: 250px;">
+                <img src="<?php echo esc_url($thumbnail_url); ?>" loading="lazy" class="card-img-top gallery-img object-fit-cover" alt="<?php the_title(); ?>" style="height: 250px;">
             </a>
             <div class="position-absolute top-0 end-0 m-3">
                 <span class="badge bg-navy text-white p-2"><?php echo esc_html($status_name); ?></span>

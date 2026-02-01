@@ -3,8 +3,14 @@
         <div class="container">
             <div class="row gy-4">
                 <div class="col-md-4">
-                    <img src="<?php echo get_template_directory_uri(); ?>/img/VLv01L.png" alt="VIROY INFRA" class="mb-3" height="50">
-                    <p class="text-white-50"><?php _e('Helping you find the perfect place to call home. Luxury properties, exceptional service.', 'viroyinfra'); ?></p>
+                    <?php
+                    if ( has_custom_logo() ) {
+                        the_custom_logo();
+                    } else {
+                        echo '<img src="' . get_template_directory_uri() . '/img/VLv01L.png" alt="VIROY INFRA" class="mb-3" height="50">';
+                    }
+                    ?>
+                    <p class="text-white-50"><?php echo esc_html(get_theme_mod('viroyinfra_footer_text', 'Helping you find the perfect place to call home. Luxury properties, exceptional service.')); ?></p>
                 </div>
                 <div class="col-md-4">
                     <h5 class="font-playfair mb-3 text-accent"><?php _e('Links', 'viroyinfra'); ?></h5>
@@ -36,16 +42,24 @@
                 <div class="col-md-4">
                     <h5 class="font-playfair mb-3 text-accent"><?php _e('Connect', 'viroyinfra'); ?></h5>
                     <div class="d-flex gap-3">
-                        <a href="#" class="text-white social-icon"><i class="bi bi-facebook fs-5"></i></a>
-                        <a href="#" class="text-white social-icon"><i class="bi bi-twitter fs-5"></i></a>
-                        <a href="#" class="text-white social-icon"><i class="bi bi-instagram fs-5"></i></a>
-                        <a href="#" class="text-white social-icon"><i class="bi bi-linkedin fs-5"></i></a>
+                        <?php if (get_theme_mod('viroyinfra_facebook')) : ?>
+                            <a href="<?php echo esc_url(get_theme_mod('viroyinfra_facebook')); ?>" class="text-white social-icon"><i class="bi bi-facebook fs-5"></i></a>
+                        <?php endif; ?>
+                        <?php if (get_theme_mod('viroyinfra_twitter')) : ?>
+                            <a href="<?php echo esc_url(get_theme_mod('viroyinfra_twitter')); ?>" class="text-white social-icon"><i class="bi bi-twitter fs-5"></i></a>
+                        <?php endif; ?>
+                        <?php if (get_theme_mod('viroyinfra_instagram')) : ?>
+                            <a href="<?php echo esc_url(get_theme_mod('viroyinfra_instagram')); ?>" class="text-white social-icon"><i class="bi bi-instagram fs-5"></i></a>
+                        <?php endif; ?>
+                        <?php if (get_theme_mod('viroyinfra_linkedin')) : ?>
+                            <a href="<?php echo esc_url(get_theme_mod('viroyinfra_linkedin')); ?>" class="text-white social-icon"><i class="bi bi-linkedin fs-5"></i></a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
             <hr class="border-secondary my-4">
             <div class="text-center text-white-50">
-                <small>&copy; <?php echo date('Y'); ?> <?php _e('Viroy Infra. All rights reserved.', 'viroyinfra'); ?></small>
+                <small>&copy; <?php echo date('Y'); ?> <?php echo esc_html(get_theme_mod('viroyinfra_copyright', 'Viroy Infra. All rights reserved.')); ?></small>
             </div>
         </div>
     </footer>
