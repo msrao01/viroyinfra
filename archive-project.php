@@ -24,24 +24,23 @@ get_header();
 
             <!-- Projects Archive List -->
             <div class="section-spacer">
-                <div class="row g-4 justify-content-center">
+                <div id="viroyinfra-projects-container" class="row g-4 justify-content-center">
                     <?php
                     if (have_posts()) :
                         while (have_posts()) : the_post();
                             get_template_part('template-parts/content', 'project');
                         endwhile;
-
-                        // Pagination
-                        the_posts_pagination(array(
-                            'mid_size'  => 2,
-                            'prev_text' => __('&laquo; Previous', 'viroyinfra'),
-                            'next_text' => __('Next &raquo;', 'viroyinfra'),
-                        ));
                     else :
                         echo '<p class="text-center">' . __('No projects found.', 'viroyinfra') . '</p>';
                     endif;
                     ?>
                 </div>
+
+                <?php if ( $wp_query->max_num_pages > 1 ) : ?>
+                    <div class="text-center mt-5">
+                        <button id="viroyinfra-load-more" class="btn btn-outline-dark rounded-pill px-5 py-3 font-playfair fw-bold"><?php _e('Load More Projects', 'viroyinfra'); ?></button>
+                    </div>
+                <?php endif; ?>
             </div>
 
         </div>

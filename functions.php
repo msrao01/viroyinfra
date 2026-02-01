@@ -12,6 +12,19 @@ function viroyinfra_scripts() {
     wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', array(), '5.3.0', true);
     wp_enqueue_script('aos-js', 'https://unpkg.com/aos@2.3.1/dist/aos.js', array(), '2.3.1', true);
 
+    // Load More JS (Only for Project Archive)
+    if (is_post_type_archive('project')) {
+        wp_enqueue_script('viroyinfra-load-more', get_template_directory_uri() . '/js/load-more.js', array('jquery'), '1.0', true);
+
+        global $wp_query;
+        wp_localize_script('viroyinfra-load-more', 'viroyinfra_load_more_params', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'current_page' => get_query_var('paged') ? get_query_var('paged') : 1,
+            'max_page' => $wp_query->max_num_pages,
+            'nonce' => wp_create_nonce('viroyinfra_load_more_nonce')
+        ));
+    }
+
     // Custom JS for AOS and Counters
     wp_add_inline_script('aos-js', '
         AOS.init({
@@ -138,6 +151,34 @@ add_action('init', 'viroyinfra_register_project_cpt');
 // Include Custom Meta
 require_once get_template_directory() . '/inc/project-meta.php';
 require_once get_template_directory() . '/inc/cpt-rewrite.php';
+
+/**
+ * AJAX Load More Handler
+ */
+function viroyinfra_ajax_load_more_projects() {
+    check_ajax_referer('viroyinfra_load_more_nonce', 'security');
+
+    $paged = $_POST['page'] + 1;
+
+    $args = array(
+        'post_type' => 'project',
+        'post_status' => 'publish',
+        'paged' => $paged,
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post();
+            get_template_part('template-parts/content', 'project');
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+    die;
+}
+add_action('wp_ajax_load_more_projects', 'viroyinfra_ajax_load_more_projects');
+add_action('wp_ajax_nopriv_load_more_projects', 'viroyinfra_ajax_load_more_projects');
 
 /**
  * Render Gallery Function
