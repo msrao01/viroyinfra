@@ -24,11 +24,11 @@ get_header();
 
             <!-- Projects Archive List -->
             <div class="section-spacer">
-                <div id="viroyinfra-projects-container" class="row g-4 justify-content-center">
+                <div id="viroyinfra-projects-container">
                     <?php
                     if (have_posts()) :
                         while (have_posts()) : the_post();
-                            get_template_part('template-parts/content', 'project');
+                            get_template_part('template-parts/content', 'project-horizontal');
                         endwhile;
                     else :
                         echo '<p class="text-center">' . __('No projects found.', 'viroyinfra') . '</p>';
