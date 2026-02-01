@@ -6,10 +6,33 @@
  */
 
 function viroyinfra_add_project_meta_boxes() {
+    // Floor Plans
     add_meta_box(
         'viroyinfra_project_floor_plans',
-        __('Floor Plans', 'viroyinfra'),
-        'viroyinfra_render_floor_plans_meta_box',
+        __('Floor Plans Gallery', 'viroyinfra'),
+        'viroyinfra_render_gallery_meta_box',
+        'project',
+        'normal',
+        'high',
+        array( 'meta_key' => '_viroyinfra_floor_plans' )
+    );
+
+    // Project Gallery
+    add_meta_box(
+        'viroyinfra_project_gallery',
+        __('Project Images Gallery', 'viroyinfra'),
+        'viroyinfra_render_gallery_meta_box',
+        'project',
+        'normal',
+        'high',
+        array( 'meta_key' => '_viroyinfra_project_gallery' )
+    );
+
+    // Project Details (Description & Location)
+    add_meta_box(
+        'viroyinfra_project_details',
+        __('Project Details', 'viroyinfra'),
+        'viroyinfra_render_details_meta_box',
         'project',
         'normal',
         'high'
@@ -17,24 +40,29 @@ function viroyinfra_add_project_meta_boxes() {
 }
 add_action('add_meta_boxes', 'viroyinfra_add_project_meta_boxes');
 
-function viroyinfra_render_floor_plans_meta_box($post) {
-    // Add nonce for security and authentication.
+/**
+ * Generic Renderer for Gallery Meta Boxes
+ */
+function viroyinfra_render_gallery_meta_box($post, $callback_args) {
     wp_nonce_field('viroyinfra_save_project_meta', 'viroyinfra_project_meta_nonce');
 
-    // Retrieve an existing value from the database.
-    $floor_plans_ids = get_post_meta($post->ID, '_viroyinfra_floor_plans', true);
+    $meta_key = $callback_args['args']['meta_key'];
+    $gallery_ids = get_post_meta($post->ID, $meta_key, true);
 
     // Convert comma-separated string to array for checking
-    $ids_array = !empty($floor_plans_ids) ? explode(',', $floor_plans_ids) : array();
+    $ids_array = !empty($gallery_ids) ? explode(',', $gallery_ids) : array();
+
+    $input_id = $meta_key . '_ids';
+    $preview_id = $meta_key . '_preview';
     ?>
     <div class="viroyinfra-gallery-metabox">
         <p>
-            <input type="button" class="button button-secondary viroyinfra-upload-btn" value="<?php _e('Add Floor Plans', 'viroyinfra'); ?>" data-target="#viroyinfra_floor_plans_ids" data-preview="#viroyinfra_floor_plans_preview" />
+            <input type="button" class="button button-secondary viroyinfra-upload-btn" value="<?php _e('Add Images', 'viroyinfra'); ?>" data-target="#<?php echo esc_attr($input_id); ?>" data-preview="#<?php echo esc_attr($preview_id); ?>" />
         </p>
 
-        <input type="hidden" id="viroyinfra_floor_plans_ids" name="viroyinfra_floor_plans" value="<?php echo esc_attr($floor_plans_ids); ?>" />
+        <input type="hidden" id="<?php echo esc_attr($input_id); ?>" name="<?php echo esc_attr($meta_key); ?>" value="<?php echo esc_attr($gallery_ids); ?>" />
 
-        <div id="viroyinfra_floor_plans_preview" class="viroyinfra-gallery-preview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+        <div id="<?php echo esc_attr($preview_id); ?>" class="viroyinfra-gallery-preview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
             <?php
             if (!empty($ids_array)) {
                 foreach ($ids_array as $attachment_id) {
@@ -49,9 +77,35 @@ function viroyinfra_render_floor_plans_meta_box($post) {
             }
             ?>
         </div>
-        <p class="description"><?php _e('Upload or select images for the floor plans gallery.', 'viroyinfra'); ?></p>
+        <p class="description"><?php _e('Upload or select images.', 'viroyinfra'); ?></p>
     </div>
     <?php
+}
+
+/**
+ * Renderer for Project Details (Location & Description)
+ */
+function viroyinfra_render_details_meta_box($post) {
+    // Location
+    $location = get_post_meta($post->ID, '_viroyinfra_location', true);
+
+    // Description
+    $description = get_post_meta($post->ID, '_viroyinfra_description', true);
+
+    echo '<p>';
+    echo '<label for="viroyinfra_location" style="display:block; font-weight:bold; margin-bottom:5px;">' . __('Location', 'viroyinfra') . '</label>';
+    echo '<input type="text" id="viroyinfra_location" name="viroyinfra_location" value="' . esc_attr($location) . '" style="width:100%;" />';
+    echo '</p>';
+
+    echo '<p>';
+    echo '<label for="viroyinfra_description" style="display:block; font-weight:bold; margin-bottom:5px;">' . __('Project Description', 'viroyinfra') . '</label>';
+    wp_editor($description, 'viroyinfra_description', array(
+        'textarea_name' => 'viroyinfra_description',
+        'media_buttons' => false,
+        'textarea_rows' => 8,
+        'teeny'         => true
+    ));
+    echo '</p>';
 }
 
 function viroyinfra_save_project_meta($post_id) {
@@ -79,9 +133,24 @@ function viroyinfra_save_project_meta($post_id) {
         return;
     }
 
-    // Update the meta field in the database.
-    if (isset($_POST['viroyinfra_floor_plans'])) {
-        update_post_meta($post_id, '_viroyinfra_floor_plans', sanitize_text_field($_POST['viroyinfra_floor_plans']));
+    // Save Floor Plans
+    if (isset($_POST['_viroyinfra_floor_plans'])) {
+        update_post_meta($post_id, '_viroyinfra_floor_plans', sanitize_text_field($_POST['_viroyinfra_floor_plans']));
+    }
+
+    // Save Project Gallery
+    if (isset($_POST['_viroyinfra_project_gallery'])) {
+        update_post_meta($post_id, '_viroyinfra_project_gallery', sanitize_text_field($_POST['_viroyinfra_project_gallery']));
+    }
+
+    // Save Location
+    if (isset($_POST['viroyinfra_location'])) {
+        update_post_meta($post_id, '_viroyinfra_location', sanitize_text_field($_POST['viroyinfra_location']));
+    }
+
+    // Save Description (Allow HTML)
+    if (isset($_POST['viroyinfra_description'])) {
+        update_post_meta($post_id, '_viroyinfra_description', wp_kses_post($_POST['viroyinfra_description']));
     }
 }
 add_action('save_post', 'viroyinfra_save_project_meta');

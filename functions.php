@@ -88,6 +88,31 @@ add_action('after_setup_theme', 'viroyinfra_setup');
 
 // Register Custom Post Type for Projects
 function viroyinfra_register_project_cpt() {
+    // Register Taxonomies
+    register_taxonomy('project_category', 'project', array(
+        'labels' => array(
+            'name' => __('Project Categories', 'viroyinfra'),
+            'singular_name' => __('Project Category', 'viroyinfra'),
+        ),
+        'hierarchical' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'query_var' => true,
+        'rewrite' => array('slug' => 'project-category'),
+    ));
+
+    register_taxonomy('project_status', 'project', array(
+        'labels' => array(
+            'name' => __('Project Status', 'viroyinfra'),
+            'singular_name' => __('Project Status', 'viroyinfra'),
+        ),
+        'hierarchical' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'query_var' => true,
+        'rewrite' => array('slug' => 'project-status'),
+    ));
+
     $labels = array(
         'name'                  => _x('Projects', 'Post Type General Name', 'viroyinfra'),
         'singular_name'         => _x('Project', 'Post Type Singular Name', 'viroyinfra'),
@@ -112,6 +137,7 @@ add_action('init', 'viroyinfra_register_project_cpt');
 
 // Include Custom Meta
 require_once get_template_directory() . '/inc/project-meta.php';
+require_once get_template_directory() . '/inc/cpt-rewrite.php';
 
 /**
  * Render Gallery Function

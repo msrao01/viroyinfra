@@ -66,13 +66,32 @@ get_header();
 
                     <!-- Quick Info -->
                     <div class="mb-5 text-center" data-aos="fade-up">
-                        <h1 class="display-4 font-playfair mb-3">Modern Luxury Villa</h1>
-                        <p class="lead text-muted mb-2"><i class="bi bi-geo-alt-fill text-accent"></i> 123 Palm Avenue, Beverly Hills, CA 90210</p>
-                        <h2 class="text-accent price-tag">$4,500,000</h2>
+                        <h1 class="display-4 font-playfair mb-3"><?php the_title(); ?></h1>
+                        <?php
+                        $location = get_post_meta(get_the_ID(), '_viroyinfra_location', true);
+                        if($location): ?>
+                            <p class="lead text-muted mb-2"><i class="bi bi-geo-alt-fill text-accent"></i> <?php echo esc_html($location); ?></p>
+                        <?php endif; ?>
+
+                        <?php
+                        // Display Status and Category
+                        $statuses = get_the_terms(get_the_ID(), 'project_status');
+                        $categories = get_the_terms(get_the_ID(), 'project_category');
+
+                        if ($statuses && !is_wp_error($statuses)) {
+                            $status_names = wp_list_pluck($statuses, 'name');
+                            echo '<span class="badge bg-navy text-white mb-2 me-2">' . esc_html(implode(', ', $status_names)) . '</span>';
+                        }
+                        if ($categories && !is_wp_error($categories)) {
+                            $cat_names = wp_list_pluck($categories, 'name');
+                            echo '<span class="badge bg-secondary text-white mb-2">' . esc_html(implode(', ', $cat_names)) . '</span>';
+                        }
+                        ?>
                     </div>
 
                     <!-- Key Stats -->
                     <div class="row text-center mb-5 justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                        <!-- Example static stats - these could also be dynamic if needed -->
                         <div class="col-md-3 col-4">
                             <div class="stat-item">
                                 <i class="bi bi-door-open text-accent"></i>
@@ -98,8 +117,15 @@ get_header();
                         <div class="row justify-content-center">
                             <div class="col-lg-10 text-center">
                                 <h3 class="section-title">About the Project</h3>
-                                <p class="lead-text">Experience the epitome of luxury living in this stunning modern villa located in the heart of Beverly Hills. This architectural masterpiece features an open floor plan, floor-to-ceiling windows, and top-of-the-line finishes throughout.</p>
-                                <p class="text-muted">The gourmet kitchen is equipped with state-of-the-art appliances and a large island, perfect for entertaining. The master suite offers a private retreat with a spa-like bathroom and a walk-in closet. Outside, you'll find a sparkling pool, a spacious patio, and beautifully landscaped gardens.</p>
+                                <?php
+                                $description = get_post_meta(get_the_ID(), '_viroyinfra_description', true);
+                                if ($description) {
+                                    echo apply_filters('the_content', $description);
+                                } else {
+                                    // Fallback to main content if meta is empty
+                                    the_content();
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -107,21 +133,15 @@ get_header();
                     <!-- 2. Project Gallery -->
                     <div id="gallery" class="section-spacer" data-aos="fade-up">
                         <h3 class="section-title text-center">Project Gallery</h3>
-                        <div class="row g-3">
-                            <div class="col-md-8">
-                                <div class="gallery-item overflow-hidden rounded shadow-sm h-100">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-1.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 1" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-1.svg">
-                                </div>
-                            </div>
-                            <div class="col-md-4 d-flex flex-column gap-3">
-                                <div class="gallery-item overflow-hidden rounded shadow-sm flex-grow-1">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-2.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 2" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-2.svg">
-                                </div>
-                                <div class="gallery-item overflow-hidden rounded shadow-sm flex-grow-1">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/img/project-view-3.svg" class="img-fluid w-100 h-100 object-fit-cover gallery-img cursor-pointer" alt="Gallery 3" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="<?php echo get_template_directory_uri(); ?>/img/project-view-3.svg">
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+                        $project_gallery = get_post_meta(get_the_ID(), '_viroyinfra_project_gallery', true);
+                        if (!empty($project_gallery)) {
+                            // Use the same reusable function, perhaps with slightly different args if needed
+                            viroyinfra_render_gallery($project_gallery, array('carousel_id' => 'projectGalleryCarousel'));
+                        } else {
+                             echo '<p class="text-center text-muted">No images available in gallery.</p>';
+                        }
+                        ?>
                     </div>
 
                     <!-- 3. Floor Plans -->
