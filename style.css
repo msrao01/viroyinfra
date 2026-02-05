@@ -306,3 +306,54 @@ footer {
         white-space: nowrap;
     }
 }
+
+/* Dynamic Gallery Styles */
+.gallery-image-container {
+    height: 400px;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.gallery-img.object-fit-contain {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+}
+
+/* Carousel Adjustments */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    opacity: 0.8;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+}
+
+/* Prevent layout shift */
+.carousel-inner {
+    padding-bottom: 20px;
+}
+
+/* Mobile Hero Caption Styles */
+@media (max-width: 768px) {
+    .carousel-caption {
+        bottom: 10%;
+        background: rgba(0, 0, 0, 0.4); /* Add background for readability */
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    .carousel-caption h5 {
+        font-size: 1.5rem; /* Smaller font on mobile */
+    }
+    .carousel-caption p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+}
