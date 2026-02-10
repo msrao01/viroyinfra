@@ -33,6 +33,18 @@
 
                     <!-- Column 2 (2/4): Menu -->
                     <div class="col-lg-6 text-center">
+                        <?php if (has_nav_menu('primary')) : ?>
+                            <?php
+                            wp_nav_menu(array(
+                                'theme_location' => 'primary',
+                                'menu_class'     => 'navbar-nav justify-content-center',
+                                'container'      => false,
+                                'depth'          => 2,
+                                // Note: Standard wp_nav_menu does not fully support Bootstrap 5 dropdowns without a Walker.
+                                // For basic functionality, we use standard output.
+                            ));
+                            ?>
+                        <?php else : ?>
                         <ul class="navbar-nav justify-content-center">
                             <li class="nav-item"><a class="nav-link <?php echo is_front_page() ? 'active' : ''; ?>" href="<?php echo home_url(); ?>">Home</a></li>
                             <li class="nav-item dropdown">
@@ -84,6 +96,7 @@
                             <li class="nav-item"><a class="nav-link <?php echo is_page('contact') ? 'active' : ''; ?>" href="<?php echo home_url('/contact'); ?>">Contact Us</a></li>
                             <li class="nav-item"><a class="nav-link <?php echo is_home() ? 'active' : ''; ?>" href="<?php echo home_url('/blog'); ?>">Blog</a></li>
                         </ul>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Column 3 (1/4): CTA Button -->

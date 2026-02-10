@@ -8,6 +8,19 @@
                 </div>
                 <div class="col-md-4">
                     <h5 class="font-playfair mb-3 text-accent">Links</h5>
+                    <?php if (has_nav_menu('footer')) : ?>
+                        <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'footer',
+                            'menu_class'     => 'list-unstyled',
+                            'container'      => false,
+                            'link_before'    => '',
+                            'link_after'     => '',
+                            // Helper to add classes to links, or use a plugin/filter.
+                            // For simplicity, we just output the menu.
+                        ));
+                        ?>
+                    <?php else : ?>
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="<?php echo home_url(); ?>" class="text-white-50 text-decoration-none hover-white">Home</a></li>
                         <li class="mb-2"><a href="<?php echo home_url('/projects'); ?>" class="text-white-50 text-decoration-none hover-white">Properties</a></li>
@@ -15,6 +28,7 @@
                         <li class="mb-2"><a href="<?php echo home_url('/contact'); ?>" class="text-white-50 text-decoration-none hover-white">Contact Us</a></li>
                         <li class="mb-2"><a href="<?php echo home_url('/blog'); ?>" class="text-white-50 text-decoration-none hover-white">Blog</a></li>
                     </ul>
+                    <?php endif; ?>
                 </div>
                 <div class="col-md-4">
                     <h5 class="font-playfair mb-3 text-accent">Connect</h5>
